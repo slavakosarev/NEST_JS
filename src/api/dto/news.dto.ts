@@ -1,4 +1,4 @@
-export class Posts {
+export class News {
   id!: number;
 
   name!: string;
@@ -7,7 +7,9 @@ export class Posts {
 
   updatedAt!: Date;
 
-  description!: string;
-
   text!: string;
+
+  author!: string;
+
+  comments!: Comment[];
 }

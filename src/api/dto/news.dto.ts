@@ -1,15 +1,39 @@
-export class News {
-  id!: number;
+import {
+  IsInt,
+  IsPositive,
+  IsString,
+  IsDate,
+  IsArray,
+  IsOptional,
+} from 'class-validator';
+import { CommentSimple } from './comment.dto';
 
+export class CreatePost {
+  @IsString()
   name!: string;
 
-  createdAt!: Date;
+  @IsString()
+  @IsOptional()
+  description!: string;
 
-  updatedAt!: Date;
-
+  @IsString()
   text!: string;
 
-  author!: string;
+  @IsArray()
+  @IsOptional()
+  comments!: CommentSimple[];
+}
 
-  comments!: Comment[];
+export class News extends CreatePost {
+  @IsInt()
+  @IsPositive()
+  id!: number;
+
+  @IsDate()
+  @IsOptional()
+  createdAt!: Date;
+
+  @IsDate()
+  @IsOptional()
+  updatedAt!: Date;
 }

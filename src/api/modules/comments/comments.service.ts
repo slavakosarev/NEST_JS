@@ -1,17 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { Comment } from '../../dto/comment.dto';
+import { News } from '../../dto/news.dto';
 import { NewsService } from '../news/news.service';
+import { CommentSimple } from '../../dto/comment.dto';
+import * as fs from 'fs';
+import { MyLogger } from '../logger/logger.service';
+
+let commentId = 3;
 
 @Injectable()
 export class CommentsService {
-  constructor(private readonly newsService: NewsService) {}
+  constructor(
+    private readonly newsService: NewsService,
+    private readonly logger: MyLogger,
+  ) {
+    this.logger.setContext('CommentsService');
+  }
 
-  async getComments(postId: number): Promise<Comment[]> {
+  async getComments(postId: number): Promise<CommentSimple[]> {
     const news = await this.newsService.getPosts();
     return news[postId].comments;
   }
 
-  async getComment(postId: number, commentId: number): Promise<Comment> {
+  async getComment(postId: number, commentId: number): Promise<CommentSimple> {
     const news = await this.newsService.getPosts();
     return news[postId].comments[commentId];
   }
@@ -19,29 +29,59 @@ export class CommentsService {
     postId: number,
     commentId: number,
     newText: string,
-  ): Promise<Comment> {
+  ): Promise<CommentSimple> {
     const news = await this.newsService.getPosts();
-    if (newText) news[postId].comments[commentId].data = newText;
+    if (newText) news[postId].comments[commentId].text = newText;
     return news[postId].comments[commentId];
   }
 
-  async createComment(postId: number, data: Comment): Promise<Comment> {
+  async createComment(
+    postId: number,
+    data: CommentSimple,
+  ): Promise<CommentSimple> {
     const news = await this.newsService.getPosts();
-    news[postId].comments.push(data);
+    const post: CommentSimple = {
+      ...data,
+      id: commentId++,
+      createdAt: new Date(Date.now()),
+    };
+    news[postId].comments.push(post);
     return data;
   }
 
-  async deleteComment(postId: number, commentId: number): Promise<Comment> {
+  async assignFile(postId: number, commentId: number, path: string) {
+    this.logger.warn(
+      `New pdf file assigned to post id ${postId} to comment id ${commentId}`,
+    );
     const news = await this.newsService.getPosts();
-    const post = news[postId];
-    const comment = post.comments;
-    if (comment) {
-      comment.splice(commentId, commentId);
-      return comment;
-    } else throw new Error(`Comment not found`);
+    news[postId - 1].comments[commentId - 1].attachments = path;
+    return news;
   }
 
-  updateComments(data: Comment): Comment | PromiseLike<Comment> {
+  async saveFile(path: string, data: Buffer) {
+    fs.writeFile(path, data, (error) => {
+      if (error) throw new Error(error.message);
+    });
+  }
+
+  async getPath(postId: number, commentId: number): Promise<string | null> {
+    const news = await this.newsService.getPosts();
+    return news[postId].comments[commentId].attachments;
+  }
+
+  async deleteComment(postId: number, commentId: number): Promise<News[]> {
+    const news = await this.newsService.getPosts();
+    const post = news[postId];
+    const comment = post.comments[commentId];
+    if (comment) {
+      post.comments.splice(commentId, 1);
+      return news;
+    } else throw new Error('Comment not found');
+  }
+
+  updateComments(
+    data: CommentSimple,
+  ): CommentSimple | PromiseLike<CommentSimple> {
     throw new Error('Method not implemented.');
   }
 }

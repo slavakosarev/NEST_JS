@@ -8,7 +8,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { NewsService } from '../modules/news/news.service';
-import { News } from '../dto/news.dto';
+import { News, CreatePost } from '../dto/news.dto';
 
 @Controller('news')
 export class NewsController {
@@ -25,7 +25,8 @@ export class NewsController {
   }
 
   @Post('create')
-  async createPost(@Body() data: News): Promise<News> {
+  async createPost(@Body() data: CreatePost): Promise<News> {
+    console.log(data);
     return this.newsService.createPost(data);
   }
 

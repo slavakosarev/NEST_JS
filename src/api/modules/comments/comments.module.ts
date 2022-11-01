@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { NewsModule } from '../news/news.module';
+import { LoggerModule } from '../logger/logger.module';
 import { CommentsService } from './comments.service';
-import { CommentsController } from '../../controllers/comments.controller';
+import { NewsController } from '../../controllers/news.controller';
 
 @Module({
-  imports: [NewsModule],
-  controllers: [CommentsController],
+  imports: [NewsModule, LoggerModule],
+  controllers: [NewsController],
   providers: [Array, CommentsService],
   exports: [CommentsService],
 })

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { News } from '../../dto/news.dto';
-import { NewsService } from '../news/news.service';
-import { CommentSimple } from '../../dto/comment.dto';
 import * as fs from 'fs';
+import { MailService } from '../../../mail/mail.service';
+import { CommentSimple } from '../../dto/comment.dto';
 import { MyLogger } from '../logger/logger.service';
+import { NewsService } from '../news/news.service';
+import { News } from '../../dto/news.dto';
 
 let commentId = 3;
 
@@ -11,6 +12,7 @@ let commentId = 3;
 export class CommentsService {
   constructor(
     private readonly newsService: NewsService,
+    private readonly mailService: MailService,
     private readonly logger: MyLogger,
   ) {
     this.logger.setContext('CommentsService');
@@ -39,6 +41,7 @@ export class CommentsService {
     postId: number,
     data: CommentSimple,
   ): Promise<CommentSimple> {
+    await this.mailService.sendLogMessage('slava_kosarev@mail.ru');
     const news = await this.newsService.getPosts();
     const post: CommentSimple = {
       ...data,

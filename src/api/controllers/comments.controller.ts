@@ -8,6 +8,7 @@ import {
   UploadedFile,
   UseInterceptors,
   Res,
+  Render,
 } from '@nestjs/common';
 import { News } from '../dto/news.dto';
 import { DecrementId } from '../utils/decrement-id.decorator';
@@ -29,6 +30,12 @@ export class CommentsController {
     @Query() @DecrementId(['id']) query: { id: number },
   ): Promise<CommentSimple[]> {
     return this.commentsService.getComments(query.id);
+  }
+
+  @Get('templates')
+  @Render('index')
+  getTemplate(): { message: string } {
+    return { message: 'Main index template' };
   }
 
   @Get('get-one')

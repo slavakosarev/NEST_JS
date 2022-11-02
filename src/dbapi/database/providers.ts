@@ -1,5 +1,5 @@
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { config } from 'dotenv';
 import { getOrmConfig } from './database-ormconfig.constant';
 

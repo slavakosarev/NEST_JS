@@ -4,11 +4,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class AppService {
-  constructor(
+export class NewsService {
+  constructor (
     @InjectRepository(Posts)
     private readonly postsRepository: Repository<Posts>,
-  ) {}
+  ) { }
 
   async getPosts(): Promise<Posts[]> {
     const posts = this.postsRepository.find();

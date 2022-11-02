@@ -13,6 +13,12 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src",
+    "views"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

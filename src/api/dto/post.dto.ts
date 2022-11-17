@@ -24,7 +24,7 @@ export class CreatePost {
   comments!: CommentSimple[];
 }
 
-export class News extends CreatePost {
+export class Posts extends CreatePost {
   @IsInt()
   @IsPositive()
   id!: number;

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { News, CreatePost } from '../../dto/news.dto';
+import { Posts, CreatePost } from '../../dto/post.dto';
 
-const news: News[] = [
+const posts: Posts[] = [
   {
     id: 1,
     name: 'fitst',
@@ -29,14 +29,14 @@ const news: News[] = [
 let postId = 2;
 
 @Injectable()
-export class NewsService {
-  newsService: any;
-  async getPosts(): Promise<News[]> {
-    return news;
+export class PostsService {
+  postsService: any;
+  async getPosts(): Promise<Posts[]> {
+    return posts;
   }
 
-  async createPost(data: CreatePost): Promise<News> {
-    const post: News = {
+  async createPost(data: CreatePost): Promise<Posts> {
+    const post: Posts = {
       ...data,
       id: postId++,
       createdAt: new Date(Date.now()),
@@ -44,32 +44,33 @@ export class NewsService {
       comments: [],
     };
 
-    news.push(post);
+    posts.push(post);
     return post;
   }
 
-  async updatePost(data: News): Promise<News> {
-    let existingPost = news[data.id];
+  async updatePost(data: Posts): Promise<Posts> {
+    let existingPost = posts[data.id];
     existingPost = {
       ...existingPost,
       ...data,
     };
-    news[data.id] = existingPost;
-    return news[data.id];
+    posts[data.id] = existingPost;
+    return posts[data.id];
   }
-  async deletePost(id: number): Promise<News[]> {
-    const post = news[id];
+
+  async deletePost(id: number): Promise<Posts[]> {
+    const post = posts[id];
     if (post) {
-      news.splice(id - 1, 1);
-      return news;
+      posts.splice(id - 1, 1);
+      return posts;
     } else throw new Error('Post not found');
   }
 
-  async getPost(postId: number): Promise<News> {
-    const post = news[postId];
+  async getPost(postId: number): Promise<Posts> {
+    const post = posts[postId];
 
     if (post) {
-      return news[postId];
+      return posts[postId];
     } else throw new Error('Post not found');
   }
 }

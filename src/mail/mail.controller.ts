@@ -3,9 +3,9 @@ import { MailService } from './mail.service';
 
 @Controller('mail')
 export class MailController {
-  constructor (private readonly mailService: MailService) { }
+  constructor(private readonly mailService: MailService) {}
   @Get()
   async sendCommentEmail() {
-    return await this.mailService.sendLogMessage('slava_kosarev@mail.ru');
+    return await this.mailService.sendLogMessage('maksimkukushkin@inbox.ru');
   }
 }

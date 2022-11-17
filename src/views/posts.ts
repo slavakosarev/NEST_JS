@@ -1,31 +1,31 @@
-import { News } from '../dto/news.dto';
+import { Posts } from '../api/dto/post.dto';
 
-export const newsTemplate = (news: News[]) => {
-  if (news?.length === 0) {
+export const postsTemplate = (posts: Posts[]) => {
+  if (posts?.length === 0) {
     return emptyNews();
   }
   let html = '<div class="row">';
-  for (const newsItem of news) {
-    const dateCr = newsItem.createdAt
-      ? newsItem.createdAt.toLocaleDateString('en-CA')
+  for (const postsItem of posts) {
+    const dateCr = postsItem.createdAt
+      ? postsItem.createdAt.toLocaleDateString('en-CA')
       : new Date().toLocaleDateString('en-CA');
 
     html += `
-<div id="postId_${newsItem.id}" class="col-lg-6">
+<div id="postId_${postsItem.id}" class="col-lg-6">
 <div class="card">
 <div class="card-body">
-<h5 class="card-title">${newsItem.name}</h5>
+<h5 class="card-title">${postsItem.name}</h5>
 <h6 class="card-subtitle mb-2 text-muted">
-${newsItem.description}
+${postsItem.description}
 </h6><h6 class="card-subtitle mb-2 text-muted">
 Дата создания: ${dateCr}
 </h6>
-<p class="card-text">${newsItem.text}</p>
+<p class="card-text">${postsItem.text}</p>
 </div>
 <div class="card-footer">`;
 
-    if (newsItem.comments !== undefined && newsItem.comments.length > 0) {
-      for (const commentsItem of newsItem.comments) {
+    if (postsItem.comments !== undefined && postsItem.comments.length > 0) {
+      for (const commentsItem of postsItem.comments) {
         const commCr = commentsItem.createdAt
           ? commentsItem.createdAt.toLocaleDateString('en-CA')
           : new Date().toLocaleDateString('en-CA');

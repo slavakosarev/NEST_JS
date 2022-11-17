@@ -1,5 +1,4 @@
 import { IsInt, IsString, IsDate, IsOptional } from 'class-validator';
-
 export class Comment {
   @IsInt()
   @IsOptional()
@@ -13,5 +12,6 @@ export class Comment {
 export class CommentSimple extends Comment {
   @IsString()
   text!: string;
+
   attachments!: string | null;
 }

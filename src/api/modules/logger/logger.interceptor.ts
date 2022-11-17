@@ -16,6 +16,11 @@ export class LoggingInterceptor implements NestInterceptor {
     console.log('Before...');
     const request = context.switchToHttp().getRequest();
     console.log(request);
+    // console.log(context);
+    // здесь происходит перехват потоков, происходящих
+    // с программой и можно, например, проверить
+    // тип файла для загрузки и отменить загрузку
+
     const now = Date.now();
     return next
       .handle()

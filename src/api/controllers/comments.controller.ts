@@ -10,14 +10,15 @@ import {
   Res,
   Render,
 } from '@nestjs/common';
-import { News } from '../dto/news.dto';
-import { DecrementId } from '../utils/decrement-id.decorator';
 import { CommentSimple } from '../dto/comment.dto';
 import { CommentsService } from '../modules/comments/comments.service';
-import { join } from 'path';
-import { createReadStream } from 'fs';
-import { Express, Response } from 'express';
+import { DecrementId } from '../../utils/decorators/decrement-id.decorator';
+import { Express } from 'express';
+import { Posts } from '../dto/post.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
+import { Response } from 'express';
+import { createReadStream } from 'fs';
 import { LoggingInterceptor } from '../modules/logger/logger.interceptor';
 
 @UseInterceptors(new LoggingInterceptor())
@@ -78,7 +79,7 @@ export class CommentsController {
   @Delete('delete')
   async deleteComment(
     @Body() body: { postId: number; commentId: number },
-  ): Promise<News[]> {
+  ): Promise<Posts[]> {
     return this.commentsService.deleteComment(body.postId, body.commentId);
   }
 

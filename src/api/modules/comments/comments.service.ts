@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
+import { Posts } from 'src/api/dto/post.dto';
+import { CommentSimple } from '../../../api/dto/comment.dto';
+import { PostsService } from '../posts/posts.service';
 import * as fs from 'fs';
-import { MailService } from '../../../mail/mail.service';
-import { CommentSimple } from '../../dto/comment.dto';
 import { MyLogger } from '../logger/logger.service';
-import { NewsService } from '../news/news.service';
-import { News } from '../../dto/news.dto';
+import { MailService } from '../../../mail/mail.service';
 
 let commentId = 3;
 
 @Injectable()
 export class CommentsService {
   constructor(
-    private readonly newsService: NewsService,
+    private readonly postsService: PostsService,
     private readonly mailService: MailService,
     private readonly logger: MyLogger,
   ) {
@@ -19,36 +19,37 @@ export class CommentsService {
   }
 
   async getComments(postId: number): Promise<CommentSimple[]> {
-    const news = await this.newsService.getPosts();
-    return news[postId].comments;
+    const posts = await this.postsService.getPosts();
+    return posts[postId].comments;
   }
 
   async getComment(postId: number, commentId: number): Promise<CommentSimple> {
-    const news = await this.newsService.getPosts();
-    return news[postId].comments[commentId];
+    const posts = await this.postsService.getPosts();
+    return posts[postId].comments[commentId];
   }
+
   async editComment(
     postId: number,
     commentId: number,
     newText: string,
   ): Promise<CommentSimple> {
-    const news = await this.newsService.getPosts();
-    if (newText) news[postId].comments[commentId].text = newText;
-    return news[postId].comments[commentId];
+    const posts = await this.postsService.getPosts();
+    if (newText) posts[postId].comments[commentId].text = newText;
+    return posts[postId].comments[commentId];
   }
 
   async createComment(
     postId: number,
     data: CommentSimple,
   ): Promise<CommentSimple> {
-    await this.mailService.sendLogMessage('slava_kosarev@mail.ru');
-    const news = await this.newsService.getPosts();
+    await this.mailService.sendLogMessage('maksimkukushkin@inbox.ru');
+    const posts = await this.postsService.getPosts();
     const post: CommentSimple = {
       ...data,
       id: commentId++,
       createdAt: new Date(Date.now()),
     };
-    news[postId].comments.push(post);
+    posts[postId].comments.push(post);
     return data;
   }
 
@@ -56,9 +57,9 @@ export class CommentsService {
     this.logger.warn(
       `New pdf file assigned to post id ${postId} to comment id ${commentId}`,
     );
-    const news = await this.newsService.getPosts();
-    news[postId - 1].comments[commentId - 1].attachments = path;
-    return news;
+    const posts = await this.postsService.getPosts();
+    posts[postId - 1].comments[commentId - 1].attachments = path;
+    return posts;
   }
 
   async saveFile(path: string, data: Buffer) {
@@ -68,17 +69,17 @@ export class CommentsService {
   }
 
   async getPath(postId: number, commentId: number): Promise<string | null> {
-    const news = await this.newsService.getPosts();
-    return news[postId].comments[commentId].attachments;
+    const posts = await this.postsService.getPosts();
+    return posts[postId].comments[commentId].attachments;
   }
 
-  async deleteComment(postId: number, commentId: number): Promise<News[]> {
-    const news = await this.newsService.getPosts();
-    const post = news[postId];
+  async deleteComment(postId: number, commentId: number): Promise<Posts[]> {
+    const posts = await this.postsService.getPosts();
+    const post = posts[postId];
     const comment = post.comments[commentId];
     if (comment) {
       post.comments.splice(commentId, 1);
-      return news;
+      return posts;
     } else throw new Error('Comment not found');
   }
 

@@ -14,8 +14,7 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src",
-    "views"
+    "src"
   ],
   "exclude": [
     "node_modules",

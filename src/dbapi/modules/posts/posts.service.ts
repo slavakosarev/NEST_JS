@@ -67,9 +67,9 @@ export class PostsService {
   }
 
   async getPost(postId: number): Promise<PostDTO> {
-    const post = posts[postId];
+    const posts = await this.postsRepository.find({ relations: ['comments'] });
 
-    if (post) {
+    if (posts) {
       return posts[postId];
     } else throw new Error('Post not found');
   }

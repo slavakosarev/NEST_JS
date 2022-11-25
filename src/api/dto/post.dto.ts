@@ -1,13 +1,39 @@
-export class Posts {
-  id!: number;
+import {
+  IsInt,
+  IsPositive,
+  IsString,
+  IsDate,
+  IsArray,
+  IsOptional,
+} from 'class-validator';
+import { CommentSimple } from './comment.dto';
 
+export class CreatePost {
+  @IsString()
   name!: string;
 
-  createdAt!: Date;
-
-  updatedAt!: Date;
-
+  @IsString()
+  @IsOptional()
   description!: string;
 
+  @IsString()
   text!: string;
+
+  @IsArray()
+  @IsOptional()
+  comments!: CommentSimple[];
+}
+
+export class Posts extends CreatePost {
+  @IsInt()
+  @IsPositive()
+  id!: number;
+
+  @IsDate()
+  @IsOptional()
+  createdAt!: Date;
+
+  @IsDate()
+  @IsOptional()
+  updatedAt!: Date;
 }

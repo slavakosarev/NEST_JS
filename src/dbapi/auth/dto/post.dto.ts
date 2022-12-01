@@ -24,7 +24,7 @@ export class CreatePost {
   comments!: CommentSimple[];
 }
 
-export class Posts extends CreatePost {
+export class PostDTO extends CreatePost {
   @IsInt()
   @IsPositive()
   id!: number;

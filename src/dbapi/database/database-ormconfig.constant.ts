@@ -28,7 +28,7 @@ export const getOrmConfig = (
   } else {
     OrmConfig = {
       ...settings,
-      synchronize: true,
+      synchronize: false,
       dropSchema: true,
     };
   }

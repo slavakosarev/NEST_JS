@@ -9,5 +9,6 @@ export const typeORMConfigProvider = TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: async (configService: ConfigService) =>
-    getOrmConfig(configService, '127.0.0.1') as TypeOrmModuleOptions,
+    //getOrmConfig(configService, '127.0.0.1') as TypeOrmModuleOptions,
+    getOrmConfig(configService, 'localhost') as TypeOrmModuleOptions,
 });
